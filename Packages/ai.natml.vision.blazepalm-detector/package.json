@@ -1,0 +1,27 @@
+{
+    "name": "ai.natml.vision.blazepalm.detector",
+    "version": "1.0.2",
+    "displayName": "BlazePalm Detector",
+    "description": "Palm detection with MediaPipe BlazePose.",
+    "unity": "2021.2",
+    "dependencies": {
+        "ai.natml.natml": "1.0.18"
+    },
+    "keywords": [
+        "natml",
+        "machine learning",
+        "ml",
+        "aritificial intelligence",
+        "palm detection",
+        "gestures",
+        "mediapipe",
+        "augmented reality"
+    ],
+    "author": {
+        "name": "NatML",
+        "email": "hi@natml.ai",
+        "url": "https://github.com/natmlx"
+    },
+    "license": "Apache-2.0",
+    "repository": "github:natml-hub/BlazePalm-Detector"
+}
