@@ -26,7 +26,7 @@
       "url": "https://registry.npmjs.com"
     },
     "ai.natml.vision.blazepalm.detector": {
-      "version": "file:ai.natml.vision.blazepalm-detector",
+      "version": "file:ai.natml.vision.blazepalm.detector",
       "depth": 0,
       "source": "embedded",
       "dependencies": {
