@@ -42,7 +42,7 @@ namespace NatML.Examples {
             visualizer.image = previewTexture;
             // Fetch the model from NatML
             modelData = await MLModelData.FromHub("@natml/blazepalm-detector");
-            model = modelData.Deserialize();
+            model = new MLEdgeModel(modelData);
             detector = new BlazePalmDetector(model);
         }
 

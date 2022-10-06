@@ -99,8 +99,8 @@ namespace NatML.Vision {
                 var rect = candidateBoxes[idx];
                 var score = candidateScores[idx];
                 var points = candidatePoints[idx];
-                var pose = new Detection(rect, score, points, imageType);
-                result.Add(pose);
+                var detection = new Detection(rect, score, points, imageType);
+                result.Add(detection);
             }
             return result.ToArray();
         }
