@@ -1,6 +1,6 @@
 /* 
-*   BlazePalm Detector
-*   Copyright (c) 2022 NatML Inc. All Rights Reserved.
+*   BlazePalm
+*   Copyright © 2023 NatML Inc. All Rights Reserved.
 */
 
 namespace NatML.Vision {

@@ -1,6 +1,6 @@
 /* 
-*   BlazePalm Detector
-*   Copyright (c) 2022 NatML Inc. All Rights Reserved.
+*   BlazePalm
+*   Copyright © 2023 NatML Inc. All Rights Reserved.
 */
 
 namespace NatML.Vision {
@@ -8,6 +8,7 @@ namespace NatML.Vision {
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using UnityEngine;
     using NatML.Features;
     using NatML.Internal;
@@ -22,38 +23,19 @@ namespace NatML.Vision {
 
         #region --Client API--
         /// <summary>
-        /// Create the Palm Detection predictor.
-        /// </summary>
-        /// <param name="model">Palm detection ML model.</param>
-        /// <param name="minScore">Minimum candidate score.</param>
-        /// <param name="maxIoU">Maximum intersection-over-union score for overlap removal.</param>
-        public BlazePalmDetector (MLModel model, float minScore = 0.5f, float maxIoU = 0.5f) {
-            this.model = model as MLEdgeModel;
-            this.minScore = minScore;
-            this.maxIoU = maxIoU;
-            var type = model.inputs[0] as MLImageType;
-            var strides = new [] { 8, 16, 16, 16 };
-            this.anchors = GenerateAnchors(type, strides, 0.1484375f, 0.75f);
-            this.candidateBoxes = new List<Rect>(anchors.Length);
-            this.candidateScores = new List<float>(anchors.Length);
-            this.candidatePoints = new List<Vector2[]>(anchors.Length);
-        }
-
-        /// <summary>
         /// Detect palms in an image.
         /// </summary>
         /// <param name="inputs">Input image.</param>
         /// <returns>Detected palms.</returns>
         public Detection[] Predict (params MLFeature[] inputs) {
-            // Check
-            if (inputs.Length != 1)
-                throw new ArgumentException(@"BlazePalm detector expects a single feature", nameof(inputs));
-            // Check type
+            // Preprocess
             var input = inputs[0];
             var imageType = MLImageType.FromType(input.type);
             var imageFeature = input as MLImageFeature;
-            if (!imageType)
-                throw new ArgumentException(@"BlazePalm detector expects an an array or image feature", nameof(inputs));
+            if (imageFeature != null) {
+                (imageFeature.mean, imageFeature.std) = model.normalization;
+                imageFeature.aspectMode = model.aspectMode;
+            }
             // Predict
             var inputType = model.inputs[0] as MLImageType;
             using var inputFeature = (input as IMLEdgeFeature).Create(inputType);
@@ -104,6 +86,29 @@ namespace NatML.Vision {
             }
             return result.ToArray();
         }
+
+        /// <summary>
+        /// Dispose the predictor and release resources.
+        /// </summary>
+        public void Dispose () => model.Dispose();
+
+        /// <summary>
+        /// Create the BlazePalm detection predictor.
+        /// </summary>
+        /// <param name="minScore">Minimum candidate score.</param>
+        /// <param name="maxIoU">Maximum intersection-over-union score for overlap removal.</param>
+        /// <param name="configuration">Edge model configuration.</param>
+        /// <param name="accessKey">NatML access key.</param>
+        public static async Task<BlazePalmDetector> Create (
+            float minScore = 0.5f,
+            float maxIoU = 0.5f,
+            MLEdgeModel.Configuration configuration = null,
+            string accessKey = null
+        ) {
+            var model = await MLEdgeModel.Create("@natml/blazepalm-detector", configuration, accessKey);
+            var predictor = new BlazePalmDetector(model, minScore, maxIoU);
+            return predictor;
+        }
         #endregion
 
 
@@ -116,7 +121,17 @@ namespace NatML.Vision {
         private readonly List<float> candidateScores;
         private readonly List<Vector2[]> candidatePoints;
 
-        void IDisposable.Dispose () { } // Not used
+        private BlazePalmDetector (MLModel model, float minScore = 0.5f, float maxIoU = 0.5f) {
+            this.model = model as MLEdgeModel;
+            this.minScore = minScore;
+            this.maxIoU = maxIoU;
+            var type = model.inputs[0] as MLImageType;
+            var strides = new [] { 8, 16, 16, 16 };
+            this.anchors = GenerateAnchors(type, strides, 0.1484375f, 0.75f);
+            this.candidateBoxes = new List<Rect>(anchors.Length);
+            this.candidateScores = new List<float>(anchors.Length);
+            this.candidatePoints = new List<Vector2[]>(anchors.Length);
+        }
 
         private static Vector2[] GenerateAnchors (MLImageType type, int[] strides, float minScale, float maxScale, float aspect = 1f) {
             var result = new List<Vector2>();

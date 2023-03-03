@@ -13,36 +13,23 @@ Add the following items to your Unity project's `Packages/manifest.json`:
     }
   ],
   "dependencies": {
-    "ai.natml.vision.blazepalm.detector": "1.0.0"
+    "ai.natml.vision.blazepalm.detector": "1.0.1"
   }
 }
 ```
 
 ## Detecting Hands in an Image
-First, create the predictor:
+First, create the detector:
 ```csharp
-// Fetch the model data from NatML Hub
-var modelData = await MLModelData.FromHub("@natml/blazepalm-detector");
-// Deserialize the model
-var model = modelData.Deserialize();
 // Create the BlazePalm detector
-var detector = new BlazePalmDetector(model);
+var detector = await BlazePalmDetector.Create();
 ```
 
-Then create an image feature:
+Finally, detect hands in an image:
 ```csharp
-// With an image
 Texture2D image = ...;
-// Create an image feature
-var imageFeature = new MLImageFeature(image);
-(imageFeature.mean, imageFeature.std) = modelData.normalization;
-imageFeature.aspectMode = modelData.aspectMode;
-```
-
-Finally, detect hands in the image:
-```csharp
 // Detect hands in the image
-BlazePalmDetector.Detection[] hands = detector.Predict(imageFeature);
+BlazePalmDetector.Detection[] hands = detector.Predict(image);
 ```
 
 ___
@@ -51,10 +38,9 @@ ___
 - Unity 2021.2+
 
 ## Quick Tips
+- Join the [NatML community on Discord](https://natml.ai/community).
 - Discover more ML models on [NatML Hub](https://hub.natml.ai).
 - See the [NatML documentation](https://docs.natml.ai/unity).
-- Join the [NatML community on Discord](https://hub.natml.ai/community).
-- Discuss [NatML on Unity Forums](https://forum.unity.com/threads/open-beta-natml-machine-learning-runtime.1109339/).
 - Contact us at [hi@natml.ai](mailto:hi@natml.ai).
 
 Thank you very much!

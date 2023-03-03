@@ -1,6 +1,6 @@
 /* 
-*   Palm Detection
-*   Copyright (c) 2022 NatML Inc. All Rights Reserved.
+*   BlazePalm
+*   Copyright © 2023 NatML Inc. All Rights Reserved.
 */
 
 namespace NatML.Visualizers {
@@ -8,11 +8,12 @@ namespace NatML.Visualizers {
     using System.Collections.Generic;
     using UnityEngine;
     using UnityEngine.UI;
+    using NatML.VideoKit.UI;
     using NatML.Vision;
 
     /// <summary>
     /// </summary>
-    [RequireComponent(typeof(RawImage), typeof(AspectRatioFitter))]
+    [RequireComponent(typeof(VideoKitCameraView))]
     public sealed class PalmDetectionVisualizer : MonoBehaviour {
 
         #region --Inspector--
