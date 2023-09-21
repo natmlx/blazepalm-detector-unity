@@ -1,11 +1,11 @@
 {
     "name": "ai.natml.vision.blazepalm.detector",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "displayName": "BlazePalm Detector",
     "description": "Palm detection from Google MediaPipe in Unity Engine.",
-    "unity": "2021.2",
+    "unity": "2022.3",
     "dependencies": {
-        "ai.natml.natml": "1.1.3"
+        "ai.natml.natml": "1.1.15"
     },
     "keywords": [
         "natml",

@@ -1,3 +1,6 @@
+## 1.0.2
++ Upgraded to NatML 1.1.15.
+
 ## 1.0.1
 + Added `BlazePalmDetector.Create` static method for creating the detector.
 + Removed `BlazePalmDetector` public constructor. Use `BlazePalmDetector.Create` method instead.
